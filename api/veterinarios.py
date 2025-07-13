@@ -14,7 +14,7 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/veterinarios", response_model=schemas.VeterinarioOut)
+@router.post("/veterinarios", response_model=schemas.VeterinarioOut, tags=["Veterinários"])
 def criar_veterinario(vet: schemas.VeterinarioCreate, db: Session = Depends(get_db)):
     clinica = db.query(models.Clinica).filter(models.Clinica.id == vet.clinica_id).first()
     if not clinica:
@@ -25,11 +25,11 @@ def criar_veterinario(vet: schemas.VeterinarioCreate, db: Session = Depends(get_
     db.refresh(db_vet)
     return db_vet
 
-@router.get("/veterinarios", response_model=List[schemas.VeterinarioOut])
+@router.get("/veterinarios", response_model=List[schemas.VeterinarioOut], tags=["Veterinários"])
 def listar_veterinarios(db: Session = Depends(get_db)):
     return db.query(models.Veterinario).all()
 
-@router.get("/{veterinario_id}/atendimentos", response_model=List[schemas.AtendimentoOut])
+@router.get("/{veterinario_id}/atendimentos", response_model=List[schemas.AtendimentoOut], tags=["Veterinários"])
 def get_atendimentos_do_veterinario(veterinario_id: int, db: Session = Depends(get_db)):
     veterinario = db.query(models.Veterinario).filter(models.Veterinario.id == veterinario_id).first()
     if not veterinario:

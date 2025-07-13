@@ -14,7 +14,7 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/atendimentos", response_model=schemas.AtendimentoOut)
+@router.post("/atendimentos", response_model=schemas.AtendimentoOut, tags=["Atendimentos"])
 def criar_atendimento(atendimento: schemas.AtendimentoCreate, db: Session = Depends(get_db)):
     pet = db.query(models.Pet).filter(models.Pet.id == atendimento.pet_id).first()
     if not pet:
@@ -28,6 +28,6 @@ def criar_atendimento(atendimento: schemas.AtendimentoCreate, db: Session = Depe
     db.refresh(db_atendimento)
     return db_atendimento
 
-@router.get("/atendimentos", response_model=List[schemas.AtendimentoOut])
+@router.get("/atendimentos", response_model=List[schemas.AtendimentoOut], tags=["Atendimentos"])
 def listar_atendimentos(db: Session = Depends(get_db)):
     return db.query(models.Atendimento).all()

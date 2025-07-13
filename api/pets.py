@@ -14,7 +14,7 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/pets", response_model=schemas.PetOut)
+@router.post("/pets", response_model=schemas.PetOut, tags=["Pets"])
 def criar_pet(pet: schemas.PetCreate, db: Session = Depends(get_db)):
     tutor = db.query(models.Tutor).filter(models.Tutor.id == pet.tutor_id).first()
     if not tutor:
@@ -25,11 +25,11 @@ def criar_pet(pet: schemas.PetCreate, db: Session = Depends(get_db)):
     db.refresh(db_pet)
     return db_pet
 
-@router.get("/pets", response_model=List[schemas.PetOut])
+@router.get("/pets", response_model=List[schemas.PetOut], tags=["Pets"])
 def listar_pets(db: Session = Depends(get_db)):
     return db.query(models.Pet).all()
 
-@router.get("/{pet_id}/atendimentos", response_model=List[schemas.AtendimentoOut])
+@router.get("/{pet_id}/atendimentos", response_model=List[schemas.AtendimentoOut], tags=["Pets"])
 def get_atendimentos_do_pet(pet_id: int, db: Session = Depends(get_db)):
     pet = db.query(models.Pet).filter(models.Pet.id == pet_id).first()
     if not pet:

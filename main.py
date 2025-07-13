@@ -7,8 +7,8 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-app.include_router(clinicas.router)
-app.include_router(veterinarios.router)
-app.include_router(tutores.router)
-app.include_router(pets.router)
-app.include_router(atendimentos.router)
+app.include_router(clinicas.router, prefix="/clinicas")
+app.include_router(veterinarios.router, prefix="/veterinarios")
+app.include_router(tutores.router, prefix="/tutores")
+app.include_router(pets.router, prefix="/pets")
+app.include_router(atendimentos.router, prefix="/atendimentos")
