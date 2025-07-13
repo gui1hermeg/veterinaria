@@ -1,13 +1,12 @@
 from fastapi import FastAPI
-from veterinaria.api import clinicas, veterinarios, tutores, pets, atendimentos
-from veterinaria.database import Base, engine
+from api import clinicas, veterinarios, tutores, pets, atendimentos
+from database import engine
+from models import models
 
-# Garante a criação das tabelas no banco
-Base.metadata.create_all(bind=engine)
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Registro das rotas
 app.include_router(clinicas.router)
 app.include_router(veterinarios.router)
 app.include_router(tutores.router)
