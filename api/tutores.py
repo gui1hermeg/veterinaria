@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import SessionLocal
 from models import models
@@ -25,3 +25,10 @@ def criar_tutor(tutor: schemas.TutorCreate, db: Session = Depends(get_db)):
 @router.get("/tutores", response_model=List[schemas.TutorOut])
 def listar_tutores(db: Session = Depends(get_db)):
     return db.query(models.Tutor).all()
+
+@router.get("/tutores/{tutor_id}/pets", response_model=List[schemas.PetOut])
+def get_pets_do_tutor(tutor_id: int, db: Session = Depends(get_db)):
+    tutor = db.query(models.Tutor).filter(models.Tutor.id == tutor_id).first()
+    if not tutor:
+        raise HTTPException(status_code=404, detail="Tutor não encontrado")
+    return tutor.pets

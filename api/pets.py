@@ -28,3 +28,12 @@ def criar_pet(pet: schemas.PetCreate, db: Session = Depends(get_db)):
 @router.get("/pets", response_model=List[schemas.PetOut])
 def listar_pets(db: Session = Depends(get_db)):
     return db.query(models.Pet).all()
+
+@router.get("/{pet_id}/atendimentos", response_model=List[schemas.AtendimentoOut])
+def get_atendimentos_do_pet(pet_id: int, db: Session = Depends(get_db)):
+    pet = db.query(models.Pet).filter(models.Pet.id == pet_id).first()
+    if not pet:
+        raise HTTPException(status_code=404, detail="Pet não encontrado")
+    
+    atendimentos = db.query(models.Atendimento).filter(models.Atendimento.pet_id == pet_id).all()
+    return atendimentos

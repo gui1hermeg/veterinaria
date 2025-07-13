@@ -28,3 +28,12 @@ def criar_veterinario(vet: schemas.VeterinarioCreate, db: Session = Depends(get_
 @router.get("/veterinarios", response_model=List[schemas.VeterinarioOut])
 def listar_veterinarios(db: Session = Depends(get_db)):
     return db.query(models.Veterinario).all()
+
+@router.get("/{veterinario_id}/atendimentos", response_model=List[schemas.AtendimentoOut])
+def get_atendimentos_do_veterinario(veterinario_id: int, db: Session = Depends(get_db)):
+    veterinario = db.query(models.Veterinario).filter(models.Veterinario.id == veterinario_id).first()
+    if not veterinario:
+        raise HTTPException(status_code=404, detail="Veterinário não encontrado")
+    
+    atendimentos = db.query(models.Atendimento).filter(models.Atendimento.veterinario_id == veterinario_id).all()
+    return atendimentos
